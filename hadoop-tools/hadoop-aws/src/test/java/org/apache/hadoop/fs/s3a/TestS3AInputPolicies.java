@@ -23,6 +23,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import edu.illinois.CartesianProductGenerator;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -61,22 +63,30 @@ public class TestS3AInputPolicies {
 
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
-    return Arrays.asList(new Object[][]{
-        {S3AInputPolicy.Normal, 0, -1, 0, _64K, 0},
-        {S3AInputPolicy.Normal, 0, -1, _10MB, _64K, _10MB},
-        {S3AInputPolicy.Normal, _64K, _64K, _10MB, _64K, _10MB},
-        {S3AInputPolicy.Sequential, 0, -1, 0, _64K, 0},
-        {S3AInputPolicy.Sequential, 0, -1, _10MB, _64K, _10MB},
-        {S3AInputPolicy.Random, 0, -1, 0, _64K, 0},
-        {S3AInputPolicy.Random, 0, -1, _10MB, _64K, _10MB},
-        {S3AInputPolicy.Random, 0, _128K, _10MB, _64K, _128K},
-        {S3AInputPolicy.Random, 0, _128K, _10MB, _256K, _256K},
-        {S3AInputPolicy.Random, 0, 0, _10MB, _256K, _256K},
-        {S3AInputPolicy.Random, 0, 1, _10MB, _256K, _256K},
-        {S3AInputPolicy.Random, 0, _1MB, _10MB, _256K, _1MB},
-        {S3AInputPolicy.Random, 0, _1MB, _10MB, 0, _1MB},
-        {S3AInputPolicy.Random, _10MB + _64K, _1MB, _10MB, _256K, _10MB},
+    return CartesianProductGenerator.generate(new Object[][] {
+            {S3AInputPolicy.Normal, S3AInputPolicy.Sequential},
+            {0, _64K, _10MB, _10MB + _64K},
+            {0, 1, -1, _64K, _128K, _1MB},
+            {0, _10MB},
+            {_64K, _256K, 0},
+            {0, _10MB, _128K, _256K, _1MB}
     });
+//    return Arrays.asList(new Object[][]{
+//        {S3AInputPolicy.Normal, 0, -1, 0, _64K, 0},
+//        {S3AInputPolicy.Normal, 0, -1, _10MB, _64K, _10MB},
+//        {S3AInputPolicy.Normal, _64K, _64K, _10MB, _64K, _10MB},
+//        {S3AInputPolicy.Sequential, 0, -1, 0, _64K, 0},
+//        {S3AInputPolicy.Sequential, 0, -1, _10MB, _64K, _10MB},
+//        {S3AInputPolicy.Random, 0, -1, 0, _64K, 0},
+//        {S3AInputPolicy.Random, 0, -1, _10MB, _64K, _10MB},
+//        {S3AInputPolicy.Random, 0, _128K, _10MB, _64K, _128K},
+//        {S3AInputPolicy.Random, 0, _128K, _10MB, _256K, _256K},
+//        {S3AInputPolicy.Random, 0, 0, _10MB, _256K, _256K},
+//        {S3AInputPolicy.Random, 0, 1, _10MB, _256K, _256K},
+//        {S3AInputPolicy.Random, 0, _1MB, _10MB, _256K, _1MB},
+//        {S3AInputPolicy.Random, 0, _1MB, _10MB, 0, _1MB},
+//        {S3AInputPolicy.Random, _10MB + _64K, _1MB, _10MB, _256K, _10MB},
+//    });
   }
 
   @Test
