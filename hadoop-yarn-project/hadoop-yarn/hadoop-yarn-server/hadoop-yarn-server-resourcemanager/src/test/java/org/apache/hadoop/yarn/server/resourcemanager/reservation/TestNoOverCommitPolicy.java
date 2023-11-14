@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import edu.illinois.CartesianProductGenerator;
+
 import net.jcip.annotations.NotThreadSafe;
 import org.apache.hadoop.yarn.server.resourcemanager.reservation.exceptions.PlanningException;
 import org.apache.hadoop.yarn.server.resourcemanager.reservation.exceptions.ResourceOverCommitException;
@@ -43,29 +45,36 @@ public class TestNoOverCommitPolicy extends BaseSharingPolicyTest {
   @Parameterized.Parameters(name = "Duration {0}, height {1}," +
           " submissions {2}, periodic {3})")
   public static Collection<Object[]> data() {
-    return Arrays.asList(new Object[][] {
+    return CartesianProductGenerator.generate(new Object[][] {
+            {ONEHOUR},
+            {0.25, 1, 1.1},
+            {1, 4, 5},
+            {null, TWOHOURPERIOD},
+            {null, ResourceOverCommitException.class}
+    });
+//    return Arrays.asList(new Object[][] {
 
         // easy fit
-        {ONEHOUR, 0.25, 1, null, null },
-        {ONEHOUR, 0.25, 1, TWOHOURPERIOD, null },
-
-        // barely fit
-        {ONEHOUR, 1, 1, null, null },
-        {ONEHOUR, 1, 1, TWOHOURPERIOD, null },
-
-        // overcommit with single reservation
-        {ONEHOUR, 1.1, 1, null, ResourceOverCommitException.class },
-        {ONEHOUR, 1.1, 1, TWOHOURPERIOD, ResourceOverCommitException.class },
-
-        // barely fit with multiple reservations
-        {ONEHOUR, 0.25, 4, null, null },
-        {ONEHOUR, 0.25, 4, TWOHOURPERIOD, null },
-
-        // overcommit with multiple reservations
-        {ONEHOUR, 0.25, 5, null, ResourceOverCommitException.class },
-        {ONEHOUR, 0.25, 5, TWOHOURPERIOD, ResourceOverCommitException.class }
-
-    });
+//        {ONEHOUR, 0.25, 1, null, null },
+//        {ONEHOUR, 0.25, 1, TWOHOURPERIOD, null },
+//
+//        // barely fit
+//        {ONEHOUR, 1, 1, null, null },
+//        {ONEHOUR, 1, 1, TWOHOURPERIOD, null },
+//
+//        // overcommit with single reservation
+//        {ONEHOUR, 1.1, 1, null, ResourceOverCommitException.class },
+//        {ONEHOUR, 1.1, 1, TWOHOURPERIOD, ResourceOverCommitException.class },
+//
+//        // barely fit with multiple reservations
+//        {ONEHOUR, 0.25, 4, null, null },
+//        {ONEHOUR, 0.25, 4, TWOHOURPERIOD, null },
+//
+//        // overcommit with multiple reservations
+//        {ONEHOUR, 0.25, 5, null, ResourceOverCommitException.class },
+//        {ONEHOUR, 0.25, 5, TWOHOURPERIOD, ResourceOverCommitException.class }
+//
+//    });
   }
 
   @Override
