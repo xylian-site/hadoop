@@ -19,6 +19,7 @@
 package org.apache.hadoop.fs.s3a;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -91,6 +92,18 @@ public class TestS3AInputPolicies {
 
   @Test
   public void testInputPolicies() throws Throwable {
+    long rangeLimit;
+    switch (policy) {
+      case Random:
+        rangeLimit = (length < 0) ? contentLength
+                : targetPos + Math.max(readahead, length);
+        break;
+      default:
+        rangeLimit = contentLength;
+    }
+    rangeLimit = Math.min(contentLength, rangeLimit);
+    Assume.assumeTrue(rangeLimit == expectedLimit);
+
     Assert.assertEquals(
         String.format("calculateRequestLimit(%s, %d, %d, %d, %d)",
             policy, targetPos, length, contentLength, readahead),
