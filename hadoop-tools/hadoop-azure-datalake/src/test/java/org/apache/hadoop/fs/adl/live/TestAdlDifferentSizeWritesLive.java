@@ -31,6 +31,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import edu.illinois.CartesianProductGenerator;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -63,12 +65,16 @@ public class TestAdlDifferentSizeWritesLive {
   @Parameterized.Parameters(name = "{index}: Data Size [{0}] ; Chunk Size "
       + "[{1}]")
   public static Collection testDataForIntegrityTest() {
-    return Arrays.asList(
-        new Object[][] {{4 * 1024, 1 * 1024}, {4 * 1024, 7 * 1024},
-            {4 * 1024, 10}, {2 * 1024, 10}, {1 * 1024, 10}, {100, 1},
-            {4 * 1024, 1 * 1024}, {7 * 1024, 2 * 1024}, {9 * 1024, 2 * 1024},
-            {10 * 1024, 3 * 1024}, {10 * 1024, 1 * 1024},
-            {10 * 1024, 8 * 1024}});
+    return CartesianProductGenerator.generate(new Object[][]{
+            {4 * 1024, 2 * 1024, 1 * 1024, 100, 10 * 1024, 7 * 1024, 9 * 1024},
+            {1 * 1024, 7 * 1024, 10, 1, 2 * 1024, 3 * 1024, 8 * 1024}
+            });
+//    return Arrays.asList(
+//        new Object[][] {{4 * 1024, 1 * 1024}, {4 * 1024, 7 * 1024},
+//            {4 * 1024, 10}, {2 * 1024, 10}, {1 * 1024, 10}, {100, 1},
+//            {4 * 1024, 1 * 1024}, {7 * 1024, 2 * 1024}, {9 * 1024, 2 * 1024},
+//            {10 * 1024, 3 * 1024}, {10 * 1024, 1 * 1024},
+//            {10 * 1024, 8 * 1024}});
   }
 
   @BeforeClass
