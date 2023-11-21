@@ -25,7 +25,8 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+//import org.junit.runners.Parameterized;
+import edu.illinois.ParameterizedWithCartesian;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -39,13 +40,14 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test {@link DecodingValidator} under various decoders.
  */
-@RunWith(Parameterized.class)
+@RunWith(ParameterizedWithCartesian.class)
 public class TestDecodingValidator extends TestRawCoderBase {
 
   private DecodingValidator validator;
 
-  @Parameterized.Parameters
+  @ParameterizedWithCartesian.Parameters
   public static Collection<Object[]> data() {
+
     return Arrays.asList(new Object[][] {
         {RSRawErasureCoderFactory.class, 6, 3, new int[]{1}, new int[]{}},
         {RSRawErasureCoderFactory.class, 6, 3, new int[]{3}, new int[]{0}},
@@ -70,6 +72,22 @@ public class TestDecodingValidator extends TestRawCoderBase {
 
   @Before
   public void setup() {
+    // Check assumptions about parameters before running the tests
+
+    // assumptions for array indexes
+    for (int erasedIndex : erasedDataIndexes) {
+      Assume.assumeTrue(erasedIndex >= 0 && erasedIndex < numDataUnits);
+    }
+
+    for (int erasedIndex : erasedParityIndexes) {
+      Assume.assumeTrue(erasedIndex >= 0 && erasedIndex < numParityUnits);
+    }
+
+    // assumptions for encoder/decoder Factory Classes
+    if(encoderFactoryClass == XORRawErasureCoderFactory.class){
+      Assume.assumeTrue(numParityUnits == 1);
+    }
+
     if (encoderFactoryClass == NativeRSRawErasureCoderFactory.class
         || encoderFactoryClass == NativeXORRawErasureCoderFactory.class) {
       Assume.assumeTrue(ErasureCodeNative.isNativeCodeLoaded());
@@ -130,6 +148,10 @@ public class TestDecodingValidator extends TestRawCoderBase {
     ensureOnlyLeastRequiredChunks(inputChunks);
     ECChunk[] recoveredChunks = prepareOutputChunksForDecoding();
     int[] erasedIndexes = getErasedIndexesForDecoding();
+
+    Assume.assumeTrue(inputChunks.length == decoder.getNumParityUnits() + decoder.getNumDataUnits());
+    Assume.assumeTrue(erasedIndexes.length == recoveredChunks.length);
+    Assume.assumeTrue(erasedIndexes.length <= decoder.getNumParityUnits());
     try {
       decoder.decode(inputChunks, erasedIndexes, recoveredChunks);
     } catch (Exception e) {
@@ -217,6 +239,10 @@ public class TestDecodingValidator extends TestRawCoderBase {
     ensureOnlyLeastRequiredChunks(inputChunks);
     ECChunk[] recoveredChunks = prepareOutputChunksForDecoding();
     int[] erasedIndexes = getErasedIndexesForDecoding();
+
+    Assume.assumeTrue(inputChunks.length == decoder.getNumParityUnits() + decoder.getNumDataUnits());
+    Assume.assumeTrue(erasedIndexes.length == recoveredChunks.length);
+    Assume.assumeTrue(erasedIndexes.length <= decoder.getNumParityUnits());
     try {
       decoder.decode(inputChunks, erasedIndexes, recoveredChunks);
     } catch (Exception e) {

@@ -21,6 +21,8 @@ package org.apache.hadoop.lib.server;
 import java.util.Arrays;
 import java.util.Collection;
 
+import edu.illinois.CartesianProductGenerator;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.test.HTestCase;
 import org.junit.Test;
@@ -32,22 +34,30 @@ public class TestServerConstructor extends HTestCase {
 
   @Parameterized.Parameters
   public static Collection constructorFailParams() {
-    return Arrays.asList(new Object[][]{
-      {null, null, null, null, null, null},
-      {"", null, null, null, null, null},
-      {null, null, null, null, null, null},
-      {"server", null, null, null, null, null},
-      {"server", "", null, null, null, null},
-      {"server", "foo", null, null, null, null},
-      {"server", "/tmp", null, null, null, null},
-      {"server", "/tmp", "", null, null, null},
-      {"server", "/tmp", "foo", null, null, null},
-      {"server", "/tmp", "/tmp", null, null, null},
-      {"server", "/tmp", "/tmp", "", null, null},
-      {"server", "/tmp", "/tmp", "foo", null, null},
-      {"server", "/tmp", "/tmp", "/tmp", null, null},
-      {"server", "/tmp", "/tmp", "/tmp", "", null},
-      {"server", "/tmp", "/tmp", "/tmp", "foo", null}});
+    return CartesianProductGenerator.generate(new Object[][] {
+            {null, "", "server"},
+            {null, "", "foo", "/tmp"},
+            {null, "", "foo", "/tmp"},
+            {null, "", "foo", "/tmp"},
+            {null, "", "foo"},
+            {null}
+    });
+  //   return Arrays.asList(new Object[][]{
+  //     {null, null, null, null, null, null},
+  //     {"", null, null, null, null, null},
+  //     {null, null, null, null, null, null},
+  //     {"server", null, null, null, null, null},
+  //     {"server", "", null, null, null, null},
+  //     {"server", "foo", null, null, null, null},
+  //     {"server", "/tmp", null, null, null, null},
+  //     {"server", "/tmp", "", null, null, null},
+  //     {"server", "/tmp", "foo", null, null, null},
+  //     {"server", "/tmp", "/tmp", null, null, null},
+  //     {"server", "/tmp", "/tmp", "", null, null},
+  //     {"server", "/tmp", "/tmp", "foo", null, null},
+  //     {"server", "/tmp", "/tmp", "/tmp", null, null},
+  //     {"server", "/tmp", "/tmp", "/tmp", "", null},
+  //     {"server", "/tmp", "/tmp", "/tmp", "foo", null}});
   }
 
   private String name;
