@@ -17,6 +17,8 @@
  */
 package org.apache.hadoop.mapreduce;
 
+import edu.illinois.CartesianProductGenerator;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -143,12 +145,18 @@ public class TestMRIntermediateDataEncryption {
       name = "{index}: TestMRIntermediateDataEncryption.{0} .. "
           + "mappers:{1}, reducers:{2}, isUber:{3})")
   public static Collection<Object[]> getTestParameters() {
-    return Arrays.asList(new Object[][]{
-        {"testSingleReducer", 3, 1, false},
-        {"testUberMode", 3, 1, true},
-        {"testMultipleMapsPerNode", 8, 1, false},
-        {"testMultipleReducers", 2, 4, false}
-    });
+    return CartesianProductGenerator.generate(new Object[][]{
+            {"testSingleReducer", "testUberMode", "testMultipleMapsPerNode", "testMultipleReducers"},
+            {2, 3, 8},
+            {1, 4},
+            {true, false}
+            });
+//    return Arrays.asList(new Object[][]{
+//        {"testSingleReducer", 3, 1, false},
+//        {"testUberMode", 3, 1, true},
+//        {"testMultipleMapsPerNode", 8, 1, false},
+//        {"testMultipleReducers", 2, 4, false}
+//    });
   }
 
   @BeforeClass
