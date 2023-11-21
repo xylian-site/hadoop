@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+import edu.illinois.CartesianProductGenerator;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,23 +43,29 @@ public class TestDirectoryMarkerPolicy extends AbstractHadoopTestBase {
 
   @Parameterized.Parameters(name = "{0}")
   public static Collection<Object[]> data() {
-    return Arrays.asList(new Object[][]{
-        {
-            DirectoryPolicy.MarkerPolicy.Delete,
-            FAIL_IF_INVOKED,
-            false, false
-        },
-        {
-            DirectoryPolicy.MarkerPolicy.Keep,
-            FAIL_IF_INVOKED,
-            true, true
-        },
-        {
-            DirectoryPolicy.MarkerPolicy.Authoritative,
-            AUTH_PATH_ONLY,
-            false, true
-        }
-    });
+    return CartesianProductGenerator.generate(new Object[][] {
+            {DirectoryPolicy.MarkerPolicy.Delete, DirectoryPolicy.MarkerPolicy.Keep, DirectoryPolicy.MarkerPolicy.Authoritative},
+            {FAIL_IF_INVOKED, AUTH_PATH_ONLY},
+            {false, true},
+            {false, true}
+            });
+//    return Arrays.asList(new Object[][]{
+//        {
+//            DirectoryPolicy.MarkerPolicy.Delete,
+//            FAIL_IF_INVOKED,
+//            false, false
+//        },
+//        {
+//            DirectoryPolicy.MarkerPolicy.Keep,
+//            FAIL_IF_INVOKED,
+//            true, true
+//        },
+//        {
+//            DirectoryPolicy.MarkerPolicy.Authoritative,
+//            AUTH_PATH_ONLY,
+//            false, true
+//        }
+//    });
   }
 
   private final DirectoryPolicy directoryPolicy;
