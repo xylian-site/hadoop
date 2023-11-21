@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.apache.hadoop.yarn.server.resourcemanager.reservation.planning;
 
+import edu.illinois.CartesianProductGenerator;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -87,14 +89,18 @@ public class TestGreedyReservationAgent {
   @Parameterized.Parameters(name = "Testing: allocateLeft {0}," +
           " recurrenceExpression {1})")
   public static Collection<Object[]> data() {
-      return Arrays.asList(new Object[][] {
-              {true, "0"},
-              {false, "0"},
-              {true, "7200000"},
-              {false, "7200000"},
-              {true, "86400000"},
-              {false, "86400000"}
-      });
+    return CartesianProductGenerator.generate(new Object[][]{
+            {true, false},
+            {"0", "7200000", "86400000"},
+            });
+//      return Arrays.asList(new Object[][] {
+//              {true, "0"},
+//              {false, "0"},
+//              {true, "7200000"},
+//              {false, "7200000"},
+//              {true, "86400000"},
+//              {false, "86400000"}
+//      });
   }
 
   @Before
