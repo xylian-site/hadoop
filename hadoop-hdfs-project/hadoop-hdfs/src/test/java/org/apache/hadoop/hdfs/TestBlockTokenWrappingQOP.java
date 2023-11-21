@@ -42,6 +42,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import edu.illinois.CartesianProductGenerator;
+
 import static org.apache.hadoop.hdfs.DFSConfigKeys.*;
 import static org.junit.Assert.*;
 
@@ -65,11 +67,15 @@ public class TestBlockTokenWrappingQOP extends SaslDataTransferTestCase {
   public static Collection<Object[]> qopSettings() {
     // if configured with privacy, the negotiated QOP should auth-conf
     // similarly for the other two
-    return Arrays.asList(new Object[][] {
-        {"privacy", "auth-conf"},
-        {"integrity", "auth-int"},
-        {"authentication", "auth"}
+    return CartesianProductGenerator.generate(new Object[][]{
+            {"privacy", "integrity", "authentication"},
+            {"auth-conf", "auth-int", "auth"}
     });
+//    return Arrays.asList(new Object[][] {
+//        {"privacy", "auth-conf"},
+//        {"integrity", "auth-int"},
+//        {"authentication", "auth"}
+//    });
   }
 
   public TestBlockTokenWrappingQOP(String configKey, String qopValue) {
