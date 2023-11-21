@@ -17,6 +17,8 @@
  */
 package org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair;
 
+import edu.illinois.CartesianProductGenerator;
+
 import org.apache.hadoop.yarn.api.records.ApplicationAttemptId;
 import org.apache.hadoop.yarn.api.records.NodeId;
 import org.apache.hadoop.yarn.api.records.ResourceRequest;
@@ -71,12 +73,16 @@ public class TestFairSchedulerPreemption extends FairSchedulerTestBase {
 
   @Parameterized.Parameters(name = "{0}")
   public static Collection<Object[]> getParameters() {
-    return Arrays.asList(new Object[][] {
-        {"MinSharePreemption", 0},
-        {"MinSharePreemptionWithDRF", 1},
-        {"FairSharePreemption", 2},
-        {"FairSharePreemptionWithDRF", 3}
-    });
+    return CartesianProductGenerator.generate(new Object[][]{
+            {"MinSharePreemption", "MinSharePreemptionWithDRF", "FairSharePreemption", "FairSharePreemptionWithDRF"},
+            {0, 1, 2, 3}
+            });
+//    return Arrays.asList(new Object[][] {
+//        {"MinSharePreemption", 0},
+//        {"MinSharePreemptionWithDRF", 1},
+//        {"FairSharePreemption", 2},
+//        {"FairSharePreemptionWithDRF", 3}
+//    });
   }
 
   public TestFairSchedulerPreemption(String name, int mode)
