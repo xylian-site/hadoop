@@ -45,6 +45,8 @@ import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.illinois.CartesianProductGenerator;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -90,19 +92,25 @@ public class TestReservationAgents {
   @Parameterized.Parameters(name = "Testing: agent {0}, allocateLeft: {1}," +
           " recurrenceExpression: {2}, numNodes: {3})")
   public static Collection<Object[]> data() {
-    return Arrays.asList(
-        new Object[][] {{GreedyReservationAgent.class, true, "0", 100 },
-            {GreedyReservationAgent.class, false, "0", 100 },
-            {GreedyReservationAgent.class, true, "7200000", 100 },
-            {GreedyReservationAgent.class, false, "7200000", 100 },
-            {GreedyReservationAgent.class, true, "86400000", 100 },
-            {GreedyReservationAgent.class, false, "86400000", 100 },
-            {AlignedPlannerWithGreedy.class, true, "0", 100 },
-            {AlignedPlannerWithGreedy.class, false, "0", 100 },
-            {AlignedPlannerWithGreedy.class, true, "7200000", 100 },
-            {AlignedPlannerWithGreedy.class, false, "7200000", 100 },
-            {AlignedPlannerWithGreedy.class, true, "86400000", 100 },
-            {AlignedPlannerWithGreedy.class, false, "86400000", 100 } });
+    return CartesianProductGenerator.generate(new Object[][]{
+            {GreedyReservationAgent.class, AlignedPlannerWithGreedy.class},
+            {true, false},
+            {"0", "7200000", "86400000"},
+            {100}
+    });
+//    return Arrays.asList(
+//        new Object[][] {{GreedyReservationAgent.class, true, "0", 100 },
+//            {GreedyReservationAgent.class, false, "0", 100 },
+//            {GreedyReservationAgent.class, true, "7200000", 100 },
+//            {GreedyReservationAgent.class, false, "7200000", 100 },
+//            {GreedyReservationAgent.class, true, "86400000", 100 },
+//            {GreedyReservationAgent.class, false, "86400000", 100 },
+//            {AlignedPlannerWithGreedy.class, true, "0", 100 },
+//            {AlignedPlannerWithGreedy.class, false, "0", 100 },
+//            {AlignedPlannerWithGreedy.class, true, "7200000", 100 },
+//            {AlignedPlannerWithGreedy.class, false, "7200000", 100 },
+//            {AlignedPlannerWithGreedy.class, true, "86400000", 100 },
+//            {AlignedPlannerWithGreedy.class, false, "86400000", 100 } });
   }
 
   @Before
